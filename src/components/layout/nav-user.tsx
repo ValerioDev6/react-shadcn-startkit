@@ -1,4 +1,3 @@
-import { SignOutDialog } from "@/components/sign-out-dialog"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -118,7 +117,7 @@ export function NavUser({ user }: NavUserProps) {
         </SidebarMenuItem>
       </SidebarMenu>
 
-      <SignOutDialog open={!!open} onOpenChange={setOpen} />
+      {/* <SignOutDialog open={!!open} onOpenChange={setOpen} /> */}
     </>
   )
 }
