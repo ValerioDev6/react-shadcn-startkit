@@ -1,15 +1,13 @@
 import { AdminRoutes } from "@/features/admin/admin.routes"
 import { AuthRoutes } from "@/features/auth/auth.routes"
-import { useEffect } from "react"
 import { Navigate, Route, Routes } from "react-router"
-import { useAuthStore } from "../store/auth.store"
 
 export const AppRoutes = () => {
-  const checkAuth = useAuthStore((state) => state.checkAuth)
+  // const checkAuth = useAuthStore((state) => state.checkAuth)
 
-  useEffect(() => {
-    checkAuth()
-  }, [checkAuth])
+  // useEffect(() => {
+  //   checkAuth()
+  // }, [checkAuth])
 
   return (
     <Routes>

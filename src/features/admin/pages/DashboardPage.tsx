@@ -63,7 +63,7 @@ export default function DashboardPage() {
       {/* Page Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground lg:text-3xl">
+          <h1 className="text-xl font-bold tracking-tight text-foreground lg:text-2xl">
             Dashboard
           </h1>
           <p className="mt-1 text-muted-foreground">
