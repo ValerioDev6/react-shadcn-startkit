@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "radix-ui"
@@ -80,14 +78,12 @@ function SidebarProvider({
       } else {
         _setOpen(openState)
       }
+
+      // This sets the cookie to keep the sidebar state.
+      document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
     },
     [setOpenProp, open]
   )
-
-  // Set cookie in useEffect to avoid concurrent rendering issues
-  React.useEffect(() => {
-    document.cookie = `${SIDEBAR_COOKIE_NAME}=${open}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
-  }, [open])
 
   // Helper to toggle the sidebar.
   const toggleSidebar = React.useCallback(() => {

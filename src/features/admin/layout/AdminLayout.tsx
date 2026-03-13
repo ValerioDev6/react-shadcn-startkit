@@ -1,53 +1,49 @@
-import AppSidebar from "@/components/layout/app-sidebar"
-import { Button } from "@/components/ui/button"
-import { SidebarProvider, useSidebar } from "@/components/ui/sidebar"
-import { TooltipProvider } from "@/components/ui/tooltip"
-import { LayoutProvider } from "@/core/context/layout-provider"
-import { PanelLeft } from "lucide-react"
+import { AppSidebar } from "@/components/app-sidebar"
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+} from "@/components/ui/breadcrumb"
+import { Separator } from "@/components/ui/separator"
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar"
 import { Outlet } from "react-router"
 
-const AdminLayout = () => {
+const AuthenticatedLayout = () => {
   return (
-    <LayoutProvider>
-      <TooltipProvider>
-        <SidebarProvider>
-          <AdminLayoutInner />
-        </SidebarProvider>
-      </TooltipProvider>
-    </LayoutProvider>
-  )
-}
-const AdminLayoutInner = () => {
-  const { open, setOpen } = useSidebar()
-  return (
-    <div className="flex min-h-screen w-full bg-background">
+    <SidebarProvider>
       <AppSidebar />
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4 lg:h-[60px]">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="lg:hidden"
-            onClick={() => setOpen(!open)}
-          >
-            <PanelLeft className="h-5 w-5" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="hidden lg:flex"
-            onClick={() => setOpen(!open)}
-          >
-            <PanelLeft className="h-5 w-5" />
-          </Button>
-          <div className="flex flex-1 items-center justify-end gap-2" />
+      <SidebarInset>
+        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+          <div className="flex items-center gap-2 px-4">
+            <SidebarTrigger className="-ml-1" />
+            <Separator
+              orientation="vertical"
+              className="mr-2 data-[orientation=vertical]:h-4"
+            />
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem className="hidden md:block">
+                  <BreadcrumbLink href="#">Panel</BreadcrumbLink>
+                </BreadcrumbItem>
+                {/* <BreadcrumbSeparator className="hidden md:block" />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>Home</BreadcrumbPage>
+                </BreadcrumbItem> */}
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
         </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           <Outlet />
-        </main>
-      </div>
-    </div>
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
   )
 }
 
-export default AdminLayout
+export default AuthenticatedLayout
