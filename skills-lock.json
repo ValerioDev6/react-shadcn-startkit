@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "skills": {
+    "react-modernization": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "computedHash": "11facc88acf2a1920b9b77d88e7efa109a00577dbf37d1adefca549eb3244d6c"
+    },
+    "react-state-management": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "computedHash": "7c63f9bf6ce2e2884b2da61e899a2701068b53ef6e87fc29e3c04a199e3092cb"
+    },
+    "tailwind-design-system": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "computedHash": "7ff2f4650597e98ca4cd8f01231fb432ab4d187d6b12e641485aa871a04448cc"
+    },
+    "typescript-advanced-types": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "computedHash": "3a3be8c925f96ac4e1280db28a01677e7ca5197f3792de2bbf35ab3bb324b6dd"
+    },
+    "visual-design-foundations": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "computedHash": "9f0f44bd206036f17f69cf78f3f3b5f9c0e0118672574ffd35c4c34c3d574d16"
+    },
+    "web-component-design": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "computedHash": "784a5a753400c54579a62974bdd867c6455555d1a7f806de8483ea5da899d154"
+    }
+  }
+}
