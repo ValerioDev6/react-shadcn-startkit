@@ -14,8 +14,8 @@ export const AdminRoutes = () => {
   return (
     <Routes>
       <Route element={<AdminLayout />}>
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/heroes/*" element={<HeroesRoutes />} />
+        <Route path="dashboard" element={<DashboardPage />} />
+        <Route path="heroes/*" element={<HeroesRoutes />} />
         <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
       </Route>
     </Routes>

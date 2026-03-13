@@ -14,8 +14,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import useDialogState from "@/hooks/use-dialog-state"
-import { Link } from "@tanstack/react-router"
+import { Link } from "react-router"
 import {
   BadgeCheck,
   Bell,
@@ -35,7 +34,6 @@ type NavUserProps = {
 
 export function NavUser({ user }: NavUserProps) {
   const { isMobile } = useSidebar()
-  const [open, setOpen] = useDialogState()
 
   return (
     <>
@@ -105,10 +103,7 @@ export function NavUser({ user }: NavUserProps) {
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem
-                variant="destructive"
-                onClick={() => setOpen(true)}
-              >
+              <DropdownMenuItem variant="destructive">
                 <LogOut />
                 Sign out
               </DropdownMenuItem>
@@ -116,8 +111,6 @@ export function NavUser({ user }: NavUserProps) {
           </DropdownMenu>
         </SidebarMenuItem>
       </SidebarMenu>
-
-      {/* <SignOutDialog open={!!open} onOpenChange={setOpen} /> */}
     </>
   )
 }

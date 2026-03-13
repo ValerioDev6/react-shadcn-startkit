@@ -14,7 +14,7 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { Link, useLocation } from "@tanstack/react-router"
+import { Link, useLocation } from "react-router"
 import { ChevronRight } from "lucide-react"
 import { type ReactNode } from "react"
 import { Badge } from "../ui/badge"
@@ -35,7 +35,8 @@ import {
 
 export function NavGroup({ title, items }: NavGroupProps) {
   const { state, isMobile } = useSidebar()
-  const href = useLocation({ select: (location) => location.href })
+  const location = useLocation()
+  const href = location.pathname
   return (
     <SidebarGroup>
       <SidebarGroupLabel>{title}</SidebarGroupLabel>

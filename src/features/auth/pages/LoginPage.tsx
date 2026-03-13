@@ -1,3 +1,13 @@
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { useAuthStore } from "@/core/store/auth.store"
 import { useState } from "react"
 import { useNavigate } from "react-router"
@@ -7,51 +17,68 @@ export const LoginPage = () => {
   const login = useAuthStore((state) => state.login)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Simular login
-    login("mock-token")
-    navigate("/admin")
+    setIsLoading(true)
+    setTimeout(() => {
+      login("mock-token")
+      navigate("/admin/dashboard")
+    }, 500)
   }
 
   return (
-    <div className="rounded-lg bg-white p-8 shadow-md">
-      <h1 className="mb-6 text-center text-2xl font-bold">Iniciar Sesión</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Email
-          </label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none"
-            placeholder="admin@example.com"
-            required
-          />
+    <Card className="mx-auto max-w-sm">
+      <CardHeader>
+        <CardTitle className="text-2xl">Iniciar Sesión</CardTitle>
+        <CardDescription>
+          Ingresa tu email y contraseña para acceder al panel de administración
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="grid gap-4">
+          <div className="grid gap-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="admin@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="grid gap-2">
+            <div className="flex items-center">
+              <Label htmlFor="password">Contraseña</Label>
+              <a
+                href="#"
+                className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+              >
+                ¿Olvidaste tu contraseña?
+              </a>
+            </div>
+            <Input
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? "Iniciando sesión..." : "Iniciar Sesión"}
+          </Button>
+        </form>
+        <div className="mt-4 text-center text-sm">
+          ¿No tienes una cuenta?{" "}
+          <a href="#" className="underline-offset-4 hover:underline">
+            Regístrate
+          </a>
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Contraseña
-          </label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none"
-            placeholder="••••••••"
-            required
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full rounded-md bg-indigo-600 px-4 py-2 text-white transition-colors hover:bg-indigo-700"
-        >
-          Iniciar Sesión
-        </button>
-      </form>
-    </div>
+      </CardContent>
+    </Card>
   )
 }
