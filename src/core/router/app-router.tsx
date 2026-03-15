@@ -1,15 +1,21 @@
-import { isNotAuthenticatedGuard } from "@/core/guards/auth.guard"
-import AdminLayout from "@/features/admin/layout/AdminLayout"
 import DashboardPage from "@/features/admin/pages/DashboardPage"
-import { AuthLayout } from "@/features/auth/layout/AuthLayout"
 import { LoginPage } from "@/features/auth/pages/LoginPage"
 import { RegisterHeroePage } from "@/features/pokemons/pages/heroe-register/RegisterHeroPage"
 import { SearchHeroePage } from "@/features/pokemons/pages/heroe-search/SearchHeroPage"
 import { HeroeListPage } from "@/features/pokemons/pages/pokemon-list/PokemonListPage"
 import TaskListPage from "@/features/tasks/pages/TaskListPage"
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router"
+import { lazy } from "react"
 
-const router = createBrowserRouter([
+import { createBrowserRouter, Navigate } from "react-router"
+import {
+  IsAuthenticatedRoute,
+  IsNotAuthenticatedRoute,
+} from "../guards/auth.guard"
+
+const AuthLayout = lazy(() => import("@/features/auth/layout/AuthLayout"))
+const AdminLayout = lazy(() => import("@/features/admin/layout/AdminLayout"))
+
+export const appRouter = createBrowserRouter([
   {
     path: "/",
     element: <Navigate to="/auth/login" replace />,
@@ -17,10 +23,9 @@ const router = createBrowserRouter([
   {
     path: "/auth",
     element: (
-      <>
-        {isNotAuthenticatedGuard()}
+      <IsNotAuthenticatedRoute>
         <AuthLayout />
-      </>
+      </IsNotAuthenticatedRoute>
     ),
     children: [
       {
@@ -35,7 +40,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <AdminLayout />,
+    element: (
+      <IsAuthenticatedRoute>
+        <AdminLayout />
+      </IsAuthenticatedRoute>
+    ),
     children: [
       {
         path: "dashboard",
@@ -78,7 +87,3 @@ const router = createBrowserRouter([
     element: <Navigate to="/auth/login" replace />,
   },
 ])
-
-export function AppRouter() {
-  return <RouterProvider router={router} />
-}

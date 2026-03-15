@@ -9,4 +9,15 @@ export class AuthService {
       throw error
     }
   }
+
+  async checkAuthStatus() {
+    const token = localStorage.getItem("token")
+    if (!token) throw new Error("No token found")
+    try {
+      const { data } = await BASE_API.get("/auth/check-status")
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
 }

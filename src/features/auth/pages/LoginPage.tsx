@@ -23,7 +23,7 @@ export const LoginPage = () => {
     e.preventDefault()
     setIsLoading(true)
     setTimeout(() => {
-      login("mock-token")
+      login(email, password)
       navigate("/admin/dashboard")
     }, 500)
   }

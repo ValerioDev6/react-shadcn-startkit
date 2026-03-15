@@ -1,30 +1,74 @@
+import type { User } from "@/features/auth/interfaces/auth.interface"
+import { AuthService } from "@/features/auth/services/auth.service"
 import { create } from "zustand"
+const authService = new AuthService()
+
+type AuthStatus = "authenticated" | "not-authenticated" | "checking"
 
 interface AuthState {
   // properties
-  isAuthenticated: boolean
   token: string | null
+  user: User | null
+  authStatus: AuthStatus
   // getters
-
+  isAdmin: () => boolean
   // actions
-  login: (token: string) => void
+  login: (email: string, password: string) => Promise<boolean>
   logout: () => void
-  checkAuth: () => void
+  checkAuthStatus: () => Promise<boolean>
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  isAuthenticated: false,
+export const useAuthStore = create<AuthState>((set, get) => ({
+  // Implementación del Store
+  user: null,
   token: null,
-  login: (token: string) => {
-    localStorage.setItem("token", token)
-    set({ isAuthenticated: true, token })
+  authStatus: "checking",
+
+  // Getters
+  isAdmin: () => {
+    const roles = get().user?.role || ""
+    return roles.includes("ADMIN")
   },
+
+  // Actions
+  login: async (email: string, password: string) => {
+    try {
+      const data = await authService.login(email, password)
+      localStorage.setItem("token", data.token)
+      set({
+        user: data.user,
+        token: data.token,
+        authStatus: "authenticated",
+      })
+      return true
+    } catch (error) {
+      localStorage.removeItem("token")
+      set({ user: null, token: null, authStatus: "not-authenticated" })
+      return false
+    }
+  },
+
   logout: () => {
     localStorage.removeItem("token")
-    set({ isAuthenticated: false, token: null })
+    set({ user: null, token: null, authStatus: "not-authenticated" })
   },
-  checkAuth: () => {
-    const token = localStorage.getItem("token")
-    set({ isAuthenticated: !!token, token })
+  checkAuthStatus: async () => {
+    try {
+      const { user, token } = await authService.checkAuthStatus()
+      set({
+        user: user,
+        token: token,
+        authStatus: "authenticated",
+      })
+      return true
+    } catch (error) {
+      set({
+        user: undefined,
+        token: undefined,
+        authStatus: "not-authenticated",
+      })
+
+      return false
+    }
   },
 }))

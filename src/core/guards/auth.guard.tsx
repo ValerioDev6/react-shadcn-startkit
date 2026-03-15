@@ -1,33 +1,31 @@
-import { Navigate, useLocation } from "react-router"
+import type { PropsWithChildren } from "react"
+import { Navigate } from "react-router"
 import { useAuthStore } from "../store/auth.store"
 
-export const isAuthenticatedGuard = () => {
-  const isAuthenticated = useAuthStore.getState().isAuthenticated
-  if (!isAuthenticated) {
-    return <Navigate to="/auth/login" replace />
-  }
-  return null
+// 👇 named export, sin default
+export const IsAuthenticatedRoute = ({ children }: PropsWithChildren) => {
+  const { authStatus } = useAuthStore()
+  if (authStatus === "checking") return null
+  if (authStatus === "not-authenticated") return <Navigate to="/auth/login" />
+  return children
 }
 
-export const isNotAuthenticatedGuard = () => {
-  const isAuthenticated = useAuthStore.getState().isAuthenticated
-  if (isAuthenticated) {
-    return <Navigate to="/admin" replace />
-  }
-  return null
+// 👇 named export, sin default
+export const IsNotAuthenticatedRoute = ({ children }: PropsWithChildren) => {
+  const { authStatus } = useAuthStore()
+  if (authStatus === "checking") return null
+  if (authStatus === "authenticated") return <Navigate to="/admin/dashboard" />
+  return children
 }
 
-export const useAuthGuard = () => {
-  const location = useLocation()
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+// export const AdminRoute = ({ children }: PropsWithChildren) => {
+//   const { authStatus, isAdmin } = useAuthStore()
 
-  if (!isAuthenticated && location.pathname !== "/auth/login") {
-    return <Navigate to="/auth/login" replace />
-  }
+//   if (authStatus === "checking") return null
 
-  if (isAuthenticated && location.pathname.startsWith("/auth")) {
-    return <Navigate to="/admin" replace />
-  }
+//   if (authStatus === "not-authenticated") return <Navigate to="/auth/login" />
 
-  return null
-}
+//   if (!isAdmin()) return <Navigate to="/" />
+
+//   return children
+// }
