@@ -1,33 +1,23 @@
 import axios from "axios"
 
-export const BASE_API = "http://localhost:3000"
-
-export const axiosInstance = axios.create({
-  baseURL: BASE_API,
-  timeout: 10000,
+export const BASE_API = axios.create({
+  baseURL: import.meta.env.VITE_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
 })
 
-axiosInstance.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("token")
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
-    }
-    return config
+// 🔍 Interceptor para mostrar todas las respuestas
+BASE_API.interceptors.response.use(
+  (response) => {
+    console.log(`[✅ RESPONSE] ${response.config.url}`, response.data)
+    return response
   },
-  (error) => Promise.reject(error)
-)
-
-axiosInstance.interceptors.response.use(
-  (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem("token")
-      window.location.href = "/auth/login"
-    }
+    console.error(
+      `[❌ ERROR] ${error.config?.url}`,
+      error.response?.data || error.message
+    )
     return Promise.reject(error)
   }
 )

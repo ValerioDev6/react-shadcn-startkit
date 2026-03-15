@@ -60,6 +60,16 @@ const data = {
         { title: "Buscar", url: "/admin/heroes/search" },
       ],
     },
+    {
+      title: "tareas",
+      url: "/admin/tasks",
+      icon: <ShieldIcon />,
+      items: [
+        { title: "Lista", url: "/admin/tasks" },
+        { title: "Registrar", url: "/admin/heroes/register" },
+        { title: "Buscar", url: "/admin/heroes/search" },
+      ],
+    },
   ],
   // projects: [
   //   {

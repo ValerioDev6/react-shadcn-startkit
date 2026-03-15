@@ -1,8 +1,12 @@
 import { create } from "zustand"
 
 interface AuthState {
+  // properties
   isAuthenticated: boolean
   token: string | null
+  // getters
+
+  // actions
   login: (token: string) => void
   logout: () => void
   checkAuth: () => void
