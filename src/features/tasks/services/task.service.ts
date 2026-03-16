@@ -53,7 +53,22 @@ export class TaskService {
         task
       )
       return response.data
-    } catch (error) {
+    } catch (error: unknown) {
+      const axiosError = error as {
+        response?: { status: number; data?: BaseApiResponse<ITask> }
+      }
+
+      if (axiosError.response?.status === 400) {
+        return (
+          axiosError.response.data || {
+            isSuccess: false,
+            message: "Error de validación",
+            data: {} as ITask,
+            statusCode: 400,
+          }
+        )
+      }
+
       return {
         isSuccess: false,
         message: `Error al crear la tarea: ${error}`,
@@ -92,7 +107,22 @@ export class TaskService {
         task
       )
       return response.data
-    } catch (error) {
+    } catch (error: unknown) {
+      const axiosError = error as {
+        response?: { status: number; data?: BaseApiResponse<ITask> }
+      }
+
+      if (axiosError.response?.status === 400) {
+        return (
+          axiosError.response.data || {
+            isSuccess: false,
+            message: "Error de validación",
+            data: {} as ITask,
+            statusCode: 400,
+          }
+        )
+      }
+
       return {
         isSuccess: false,
         message: `Error al actualizar la tarea: ${error}`,

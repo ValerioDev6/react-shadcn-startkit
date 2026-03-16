@@ -22,21 +22,21 @@ export function CreateTaskDialog({
   onOpenChange,
   onSuccess,
 }: CreateTaskDialogProps) {
-  const {
-    handleSubmit,
-    errors,
-    isLoading,
-    serverError,
-    setValue,
-    watch,
-    trigger,
-  } = useTaskForm(onSuccess, () => onOpenChange(false))
+  const { handleSubmit, errors, isLoading, setValue, watch, trigger, close } =
+    useTaskForm(onSuccess, () => onOpenChange(false))
 
   const title = watch("title")
   const description = watch("description")
 
+  const handleClose = (isOpen: boolean) => {
+    if (!isOpen) {
+      close()
+    }
+    onOpenChange(isOpen)
+  }
+
   return (
-    <Dialog open={open} onOpenChange={(isOpen) => !isOpen}>
+    <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Nueva Tarea</DialogTitle>
@@ -44,11 +44,6 @@ export function CreateTaskDialog({
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
-            {serverError && (
-              <div className="rounded bg-red-50 p-3 text-sm text-red-500">
-                {serverError}
-              </div>
-            )}
             <div className="grid gap-2">
               <Label htmlFor="title">Título</Label>
               <Input

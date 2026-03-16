@@ -1,4 +1,5 @@
 import { taskService } from "@/features/tasks/services/task.service"
+import type { BaseApiResponse } from "@/shared/interfaces/common/base-api-response.interface"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
@@ -46,7 +47,13 @@ export function useTaskForm(onSuccess: () => void, onClose?: () => void) {
       onSuccess()
       onClose?.()
     } else {
-      setServerError(response.message)
+      const apiResponse = response as BaseApiResponse<unknown>
+      if (apiResponse.errors && apiResponse.errors.length > 0) {
+        apiResponse.errors.forEach((error) => toast.error(String(error)))
+      } else {
+        setServerError(response.message)
+        toast.error(response.message)
+      }
     }
 
     setIsLoading(false)

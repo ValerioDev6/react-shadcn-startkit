@@ -102,9 +102,8 @@ const TaskListPage = () => {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Gestion de Tareas</CardTitle>
-          <Button onClick={handleCreate}>
-            <Plus className="mr-2 h-4 w-4" />
-            Nueva Tarea
+          <Button size="lg" onClick={handleCreate}>
+            <Plus /> Nueva Tarea
           </Button>
         </CardHeader>
         <CardContent>
