@@ -10,8 +10,8 @@ export interface Info {
   totalPages: number
   hasPreviousPage: boolean
   hasNextPage: boolean
-  next?: any
-  prev?: any
+  next?: number
+  prev?: number
 }
 
 export interface ITask {

@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/button"
 ```bash
 pnpm add @tanstack/react-router @tanstack/react-router-devtools
 pnpm add -D @tanstack/router-plugin
+pnpm install react-hook-form
 
 config vite.config.ts
 // vite.config.ts

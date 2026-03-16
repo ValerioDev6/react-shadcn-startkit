@@ -20,14 +20,22 @@ import { Pagination } from "@/shared/components/Pagination"
 import { usePagination } from "@/shared/hooks/usePagination"
 import { Eye, Pencil, Plus, Trash2, X } from "lucide-react"
 import { useState } from "react"
+import { CreateTaskDialog } from "../components/CreateTaskDialog"
+import { DeleteConfirmDialog } from "../components/DeleteConfirmDialog"
+import { UpdateTaskDialog } from "../components/UpdateTaskDialog"
 import { useTasks } from "../hooks/useTasks"
-import { taskService } from "../services/task.service"
 
 const TaskListPage = () => {
   const [search, setSearch] = useState("")
   const { page, limit, setPage, setLimit } = usePagination({ initialLimit: 10 })
   const { tasks, info, loading, error, refetch } = useTasks(search, page, limit)
   const [searchInput, setSearchInput] = useState("")
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
+  const [editTaskId, setEditTaskId] = useState<string | null>(null)
+  const [deleteTask, setDeleteTask] = useState<{
+    id: string
+    title: string
+  } | null>(null)
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -41,21 +49,20 @@ const TaskListPage = () => {
     setPage(1)
   }
 
-  const handleDelete = async (id: string) => {
-    await taskService.deleteTask(id)
-    refetch()
-  }
-
   const handleView = (id: string) => {
     console.log("View task:", id)
   }
 
   const handleEdit = (id: string) => {
-    console.log("Edit task:", id)
+    setEditTaskId(id)
+  }
+
+  const handleDelete = (id: string, title: string) => {
+    setDeleteTask({ id, title })
   }
 
   const handleCreate = () => {
-    console.log("Create new task")
+    setIsCreateDialogOpen(true)
   }
 
   if (loading) {
@@ -171,7 +178,7 @@ const TaskListPage = () => {
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => handleDelete(task.id)}
+                          onClick={() => handleDelete(task.id, task.title)}
                         >
                           <Trash2 className="h-4 w-4 text-red-500" />
                         </Button>
@@ -195,6 +202,27 @@ const TaskListPage = () => {
           )}
         </CardContent>
       </Card>
+
+      <CreateTaskDialog
+        open={isCreateDialogOpen}
+        onOpenChange={setIsCreateDialogOpen}
+        onSuccess={refetch}
+      />
+
+      <UpdateTaskDialog
+        taskId={editTaskId}
+        open={!!editTaskId}
+        onOpenChange={(open) => !open && setEditTaskId(null)}
+        onSuccess={refetch}
+      />
+
+      <DeleteConfirmDialog
+        taskId={deleteTask?.id || null}
+        taskTitle={deleteTask?.title || ""}
+        open={!!deleteTask}
+        onOpenChange={(open) => !open && setDeleteTask(null)}
+        onSuccess={refetch}
+      />
     </div>
   )
 }

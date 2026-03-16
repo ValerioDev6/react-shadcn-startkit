@@ -7,6 +7,6 @@ export interface User {
   id: string
   email: string
   name: string
-  country: any
+  country: string | null
   role: string
 }

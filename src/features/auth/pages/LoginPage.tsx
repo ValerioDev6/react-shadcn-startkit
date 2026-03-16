@@ -9,23 +9,35 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useAuthStore } from "@/core/store/auth.store"
-import { useState } from "react"
+import React, { useState } from "react"
 import { useNavigate } from "react-router"
+import { toast } from "sonner"
 
 export const LoginPage = () => {
   const navigate = useNavigate()
   const login = useAuthStore((state) => state.login)
-  const [email, setEmail] = useState("")
+  const [email, setEmail] = useState("valerioemail954@gmail.com")
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    setTimeout(() => {
-      login(email, password)
-      navigate("/admin/dashboard")
-    }, 500)
+
+    try {
+      const success = await login(email, password)
+      if (success) {
+        navigate("/admin/dashboard", { replace: true })
+      } else {
+        toast.warning("Credenciales inválidas", {
+          position: "top-right",
+        })
+      }
+    } catch {
+      toast.warning("Credenciales inválidas")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -62,7 +74,7 @@ export const LoginPage = () => {
             <Input
               id="password"
               type="password"
-              placeholder="••••••••"
+              placeholder="********"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required

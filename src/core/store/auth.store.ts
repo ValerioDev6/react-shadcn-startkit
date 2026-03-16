@@ -1,36 +1,31 @@
 import type { User } from "@/features/auth/interfaces/auth.interface"
 import { AuthService } from "@/features/auth/services/auth.service"
 import { create } from "zustand"
+
 const authService = new AuthService()
 
 type AuthStatus = "authenticated" | "not-authenticated" | "checking"
 
 interface AuthState {
-  // properties
   token: string | null
   user: User | null
   authStatus: AuthStatus
-  // getters
   isAdmin: () => boolean
-  // actions
   login: (email: string, password: string) => Promise<boolean>
   logout: () => void
-  checkAuthStatus: () => Promise<boolean>
+  checkAuthStatus: () => Promise<void>
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
-  // Implementación del Store
   user: null,
   token: null,
   authStatus: "checking",
 
-  // Getters
   isAdmin: () => {
     const roles = get().user?.role || ""
     return roles.includes("ADMIN")
   },
 
-  // Actions
   login: async (email: string, password: string) => {
     try {
       const data = await authService.login(email, password)
@@ -41,7 +36,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         authStatus: "authenticated",
       })
       return true
-    } catch (error) {
+    } catch {
       localStorage.removeItem("token")
       set({ user: null, token: null, authStatus: "not-authenticated" })
       return false
@@ -52,23 +47,24 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     localStorage.removeItem("token")
     set({ user: null, token: null, authStatus: "not-authenticated" })
   },
+
   checkAuthStatus: async () => {
+    const token = localStorage.getItem("token")
+    if (!token) {
+      set({ authStatus: "not-authenticated" })
+      return
+    }
+
     try {
-      const { user, token } = await authService.checkAuthStatus()
+      const data = await authService.checkAuthStatus()
       set({
-        user: user,
-        token: token,
+        user: data.user,
+        token: data.token,
         authStatus: "authenticated",
       })
-      return true
-    } catch (error) {
-      set({
-        user: undefined,
-        token: undefined,
-        authStatus: "not-authenticated",
-      })
-
-      return false
+    } catch {
+      localStorage.removeItem("token")
+      set({ user: null, token: null, authStatus: "not-authenticated" })
     }
   },
 }))

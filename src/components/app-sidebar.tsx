@@ -16,7 +16,7 @@ import {
   AudioLinesIcon,
   GalleryVerticalEndIcon,
   LayoutDashboard,
-  ShieldIcon,
+  NotebookTabs,
   TerminalIcon,
 } from "lucide-react"
 
@@ -51,23 +51,12 @@ const data = {
       icon: <LayoutDashboard />,
     },
     {
-      title: "Heroes",
-      url: "/admin/heroes",
-      icon: <ShieldIcon />,
-      items: [
-        { title: "Lista", url: "/admin/heroes" },
-        { title: "Registrar", url: "/admin/heroes/register" },
-        { title: "Buscar", url: "/admin/heroes/search" },
-      ],
-    },
-    {
       title: "tareas",
       url: "/admin/tasks",
-      icon: <ShieldIcon />,
+      icon: <NotebookTabs />,
       items: [
         { title: "Lista", url: "/admin/tasks" },
-        { title: "Registrar", url: "/admin/heroes/register" },
-        { title: "Buscar", url: "/admin/heroes/search" },
+        { title: "Registrar", url: "/admin/tasks/register" },
       ],
     },
   ],

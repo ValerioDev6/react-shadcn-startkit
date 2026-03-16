@@ -146,7 +146,7 @@ export function Pagination({
           onChange={(e) => setGoToPage(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleGoToPage()}
           className="h-8 w-16 text-center"
-          placeholder="#"
+          placeholder=""
         />
         <Button variant="secondary" size="sm" onClick={handleGoToPage}>
           Ir

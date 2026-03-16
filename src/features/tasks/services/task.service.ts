@@ -1,5 +1,6 @@
 import { BASE_API } from "@/core/common/axios"
 import type { BaseApiResponse } from "@/shared/interfaces/common/base-api-response.interface"
+import type { ITaskById } from "../interfaces/task.interface"
 import type { ITask, ITasks } from "../interfaces/tasks.interface"
 
 export class TaskService {
@@ -18,7 +19,21 @@ export class TaskService {
       })
 
       return response.data
-    } catch (error) {
+    } catch (error: unknown) {
+      const axiosError = error as {
+        response?: { status: number; data?: BaseApiResponse<ITasks> }
+      }
+
+      if (axiosError.response?.status === 404) {
+        return {
+          isSuccess: true,
+          message:
+            axiosError.response.data?.message || "No se encontraron tareas",
+          data: { items: [], info: {} as ITasks["info"] },
+          statusCode: 404,
+        }
+      }
+
       return {
         isSuccess: false,
         message: `Error al obtener las tareas: ${error}`,
@@ -42,6 +57,45 @@ export class TaskService {
       return {
         isSuccess: false,
         message: `Error al crear la tarea: ${error}`,
+        data: {} as ITask,
+        statusCode: 500,
+      }
+    }
+  }
+
+  async getBytIdTasks(id: string): Promise<BaseApiResponse<ITaskById>> {
+    try {
+      const response = await BASE_API.get<BaseApiResponse<ITaskById>>(
+        `/tasks/${id}`
+      )
+      return response.data
+    } catch (error) {
+      return {
+        isSuccess: false,
+        message: `Error al eliminar la tarea: ${error}`,
+        data: null!,
+        statusCode: 500,
+      }
+    }
+  }
+
+  async updatedTaks(
+    task: {
+      title?: string
+      description?: string
+    },
+    id: string
+  ): Promise<BaseApiResponse<ITask>> {
+    try {
+      const response = await BASE_API.patch<BaseApiResponse<ITask>>(
+        `/tasks/${id}`,
+        task
+      )
+      return response.data
+    } catch (error) {
+      return {
+        isSuccess: false,
+        message: `Error al actualizar la tarea: ${error}`,
         data: {} as ITask,
         statusCode: 500,
       }

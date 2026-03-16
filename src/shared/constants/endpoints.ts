@@ -1,3 +1,4 @@
 export const endpoints = {
-  HEROES: "heroes",
+  AUTH_LOGIN: "auth/login",
+  TASK: "tasks",
 }

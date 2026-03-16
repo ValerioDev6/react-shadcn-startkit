@@ -1,4 +1,5 @@
 import axios from "axios"
+import { redirect } from "react-router"
 
 export const BASE_API = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
@@ -7,10 +8,9 @@ export const BASE_API = axios.create({
   },
 })
 
-// 🔐 Interceptor de REQUEST → agrega el token en cada petición
 BASE_API.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token") // o de donde guardes el token
+    const token = localStorage.getItem("token")
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
@@ -19,17 +19,13 @@ BASE_API.interceptors.request.use(
   (error) => Promise.reject(error)
 )
 
-// 🔍 Interceptor para mostrar todas las respuestas
 BASE_API.interceptors.response.use(
-  (response) => {
-    console.log(`[✅ RESPONSE] ${response.config.url}`, response.data)
-    return response
-  },
+  (response) => response,
   (error) => {
-    console.error(
-      `[❌ ERROR] ${error.config?.url}`,
-      error.response?.data || error.message
-    )
+    if (error.response?.status === 401) {
+      localStorage.removeItem("token")
+      redirect("/auth/login")
+    }
     return Promise.reject(error)
   }
 )

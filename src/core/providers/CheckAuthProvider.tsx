@@ -1,15 +1,16 @@
-// core/providers/CheckAuthProvider.tsx
-import { CustomFullScreenLoading } from "@/shared/components/custom/CustomFullScreenLoading"
-import { type PropsWithChildren, useEffect } from "react"
+import type { PropsWithChildren } from "react"
+import { useEffect } from "react"
 import { useAuthStore } from "../store/auth.store"
 
 export const CheckAuthProvider = ({ children }: PropsWithChildren) => {
-  const { checkAuthStatus, authStatus } = useAuthStore()
+  const checkAuthStatus = useAuthStore((state) => state.checkAuthStatus)
+  const authStatus = useAuthStore((state) => state.authStatus)
 
   useEffect(() => {
-    checkAuthStatus()
-  }, [])
+    if (authStatus === "checking") {
+      checkAuthStatus()
+    }
+  }, [authStatus, checkAuthStatus])
 
-  if (authStatus === "checking") return <CustomFullScreenLoading />
   return children
 }

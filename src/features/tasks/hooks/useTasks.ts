@@ -21,7 +21,39 @@ export function useTasks(
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const fetchTasks = async () => {
+  useEffect(() => {
+    let cancelled = false
+
+    async function fetchTasks() {
+      setLoading(true)
+      setError(null)
+
+      const response: BaseApiResponse<ITasks> = await taskService.getAllTasks(
+        search,
+        page,
+        limit
+      )
+
+      if (cancelled) return
+
+      if (response.isSuccess) {
+        setTasks(response.data.items)
+        setInfo(response.data.info)
+      } else {
+        setError(response.message)
+      }
+
+      setLoading(false)
+    }
+
+    fetchTasks()
+
+    return () => {
+      cancelled = true
+    }
+  }, [search, page, limit])
+
+  const refetch = async () => {
     setLoading(true)
     setError(null)
 
@@ -41,15 +73,11 @@ export function useTasks(
     setLoading(false)
   }
 
-  useEffect(() => {
-    fetchTasks()
-  }, [search, page, limit])
-
   return {
     tasks,
     info,
     loading,
     error,
-    refetch: fetchTasks,
+    refetch,
   }
 }

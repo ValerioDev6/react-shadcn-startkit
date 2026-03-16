@@ -1,11 +1,10 @@
 import DashboardPage from "@/features/admin/pages/DashboardPage"
 import { LoginPage } from "@/features/auth/pages/LoginPage"
-import { RegisterHeroePage } from "@/features/pokemons/pages/heroe-register/RegisterHeroPage"
-import { SearchHeroePage } from "@/features/pokemons/pages/heroe-search/SearchHeroPage"
-import { HeroeListPage } from "@/features/pokemons/pages/pokemon-list/PokemonListPage"
 import TaskListPage from "@/features/tasks/pages/TaskListPage"
 import { lazy } from "react"
 
+import RegisterPage from "@/features/auth/pages/RegisterPage"
+import TaskRegisterPage from "@/features/tasks/pages/TaskRegisterPage"
 import { createBrowserRouter, Navigate } from "react-router"
 import {
   IsAuthenticatedRoute,
@@ -33,6 +32,10 @@ export const appRouter = createBrowserRouter([
         element: <LoginPage />,
       },
       {
+        path: "register",
+        element: <RegisterPage />,
+      },
+      {
         path: "",
         element: <Navigate to="/auth/login" replace />,
       },
@@ -51,28 +54,15 @@ export const appRouter = createBrowserRouter([
         element: <DashboardPage />,
       },
       {
-        path: "heroes",
-        children: [
-          {
-            path: "",
-            element: <HeroeListPage />,
-          },
-          {
-            path: "register",
-            element: <RegisterHeroePage />,
-          },
-          {
-            path: "search",
-            element: <SearchHeroePage />,
-          },
-        ],
-      },
-      {
         path: "tasks",
         children: [
           {
             path: "",
             element: <TaskListPage />,
+          },
+          {
+            path: "register",
+            element: <TaskRegisterPage />,
           },
         ],
       },
